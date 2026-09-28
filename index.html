@@ -15,7 +15,7 @@
   --line:#DCE1E8; --line-2:#C2C9D5; --ring:rgba(37,99,235,.35);
   --btn:#151D2C; --on-btn:#FFFFFF; --danger:#C62A1E; --fruit:#F08C00;
   --h-rose:#C8443A; --h-amber:#C47400; --h-green:#2F8A4E; --h-blue:#2563EB; --h-violet:#6E56CF;
-  --h-teal:#0B8A8F; --h-brown:#8A6A4C; --h-slate:#56657E; --h-pink:#B8467F;
+  --h-teal:#0B8A8F; --h-brown:#8A6A4C; --h-slate:#56657E; --h-pink:#B8467F; --h-olive:#667A1E;
   --shadow:0 1px 2px rgba(21,29,44,.06),0 10px 28px rgba(21,29,44,.10);
   --font:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --serif:"Literata",Georgia,"Times New Roman",serif;
@@ -27,7 +27,7 @@
     --line:#252F40; --line-2:#354257; --ring:rgba(106,165,255,.45);
     --btn:#E7EBF2; --on-btn:#0E131B; --danger:#FF7A6E; --fruit:#FDA43A;
     --h-rose:#FF8A7E; --h-amber:#F2B441; --h-green:#6FCF97; --h-blue:#6AA5FF; --h-violet:#B4A5F5;
-    --h-teal:#45C7C9; --h-brown:#CDB294; --h-slate:#9AA8BD; --h-pink:#F08DC0;
+    --h-teal:#45C7C9; --h-brown:#CDB294; --h-slate:#9AA8BD; --h-pink:#F08DC0; --h-olive:#B5CB63;
     --shadow:0 1px 2px rgba(0,0,0,.35),0 12px 32px rgba(0,0,0,.45);
     color-scheme:dark;
   }
@@ -37,14 +37,14 @@
   --line:#252F40; --line-2:#354257; --ring:rgba(106,165,255,.45);
   --btn:#E7EBF2; --on-btn:#0E131B; --danger:#FF7A6E; --fruit:#FDA43A;
   --h-rose:#FF8A7E; --h-amber:#F2B441; --h-green:#6FCF97; --h-blue:#6AA5FF; --h-violet:#B4A5F5;
-  --h-teal:#45C7C9; --h-brown:#CDB294; --h-slate:#9AA8BD; --h-pink:#F08DC0;
+  --h-teal:#45C7C9; --h-brown:#CDB294; --h-slate:#9AA8BD; --h-pink:#F08DC0; --h-olive:#B5CB63;
   --shadow:0 1px 2px rgba(0,0,0,.35),0 12px 32px rgba(0,0,0,.45);
   color-scheme:dark;
 }
 /* each pillar carries one colour; everything inside it is tinted from --pc */
 .pc-rose{--pc:var(--h-rose)} .pc-amber{--pc:var(--h-amber)} .pc-green{--pc:var(--h-green)}
 .pc-blue{--pc:var(--h-blue)} .pc-violet{--pc:var(--h-violet)} .pc-teal{--pc:var(--h-teal)}
-.pc-brown{--pc:var(--h-brown)} .pc-slate{--pc:var(--h-slate)} .pc-pink{--pc:var(--h-pink)}
+.pc-brown{--pc:var(--h-brown)} .pc-slate{--pc:var(--h-slate)} .pc-pink{--pc:var(--h-pink)} .pc-olive{--pc:var(--h-olive)}
 [class^="pc-"],[class*=" pc-"]{--pc-soft:color-mix(in srgb,var(--pc) 13%,var(--surface));--pc-line:color-mix(in srgb,var(--pc) 45%,var(--line))}
 
 [hidden]{display:none!important}
@@ -139,6 +139,19 @@ textarea{resize:vertical;line-height:1.45}
 .gadd:hover{border-color:var(--pc);color:var(--ink)}
 .gadd>svg.i{color:var(--pc)}
 .gadd small{display:block;margin-top:2px;font-weight:400;font-size:12.5px;color:var(--muted)}
+.pickgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-top:22px}
+.pick{display:flex;align-items:center;gap:12px;min-height:66px;padding:12px 14px;border-radius:14px;background:var(--surface);border:1.5px solid var(--line);text-align:left;transition:border-color .15s,background .15s}
+.pick:hover{border-color:var(--pc-line)}
+.pick[aria-pressed="true"]{border-color:var(--pc);background:var(--pc-soft)}
+.pick[aria-pressed="true"] .picon{background:var(--surface)}
+.pick .pn{flex:1;min-width:0;font-size:15px;font-weight:600;line-height:1.3}
+.pick .pn small{display:block;margin-top:2px;font-size:12.5px;font-weight:400;color:var(--muted)}
+.pick .tick{width:22px;height:22px;border-radius:50%;border:1.8px solid var(--line-2);display:grid;place-items:center;color:transparent;flex:none}
+.pick .tick svg.i{width:14px;height:14px;stroke-width:2.6}
+.pick[aria-pressed="true"] .tick{background:var(--pc);border-color:var(--pc);color:var(--surface)}
+.setup-foot{position:sticky;bottom:0;z-index:4;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin-top:10px;padding:22px 0 calc(16px + env(safe-area-inset-bottom,0px));background:linear-gradient(to bottom,transparent,var(--bg) 26px)}
+.setup-foot .muted{flex:1;min-width:210px;font-size:13px}
+.setup-foot .btn:disabled{opacity:.5;cursor:default}
 .empty{margin-top:36px;padding:28px 20px;text-align:center;border:1.5px dashed var(--line-2);border-radius:16px;color:var(--ink-2)}
 .empty .row{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:14px}
 
@@ -435,11 +448,15 @@ const PICON={
   star:'<path d="M12 4l2.4 5 5.4.7-4 3.7 1 5.4L12 16.2l-4.8 2.6 1-5.4-4-3.7 5.4-.7z"/>',
   compass:'<circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
   sun:'<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6 7 7M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"/>',
-  smile:'<circle cx="12" cy="12" r="8.5"/><path d="M8.5 14c.9 1.3 2.1 2 3.5 2s2.6-.7 3.5-2M9 9.5h.01M15 9.5h.01"/>'
+  smile:'<circle cx="12" cy="12" r="8.5"/><path d="M8.5 14c.9 1.3 2.1 2 3.5 2s2.6-.7 3.5-2M9 9.5h.01M15 9.5h.01"/>',
+  mountain:'<path d="M3 19.5 9.5 8.5l3.7 6.3 2.3-3.3 5.5 8z"/><path d="M9.5 8.5V4l3.2 1.3-3.2 1.3"/>',
+  hands:'<path d="M12 20s-6.5-4-6.5-8.6A3.6 3.6 0 0 1 12 9.3a3.6 3.6 0 0 1 6.5 2.1C18.5 16 12 20 12 20z"/><path d="M12 4.5V2.8M7.5 5.6 6.6 4.3M16.5 5.6l.9-1.3"/>',
+  sofa:'<path d="M5.5 11V8.5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2V11"/><path d="M3.5 13a2 2 0 0 1 4 0v1.5h9V13a2 2 0 0 1 4 0v4.5h-17z"/><path d="M5.5 17.5v2M18.5 17.5v2"/>'
 };
-const COLORS=['rose','amber','green','blue','violet','teal','brown','slate','pink'];
+const COLORS=['rose','amber','green','blue','violet','teal','brown','slate','pink','olive'];
 
-// the five default pillars, each with worked examples so an empty form never starts from a blank page
+// suggested pillars, each with worked examples so an empty form never starts from a blank page.
+// The first five are ticked by default on first run; the rest are areas the defaults leave out.
 const KINDS={
   family:{name:'Gia đình',color:'rose',icon:'home',
     s:'Ăn tối cùng cả nhà ít nhất 5 buổi mỗi tuần',m:['Số bữa tối cùng cả nhà mỗi tuần','2','5','bữa'],
@@ -453,11 +470,30 @@ const KINDS={
   career:{name:'Sự nghiệp',color:'blue',icon:'brief',
     s:'Lên vị trí trưởng nhóm kinh doanh',m:['Doanh số quý của nhóm','1,2','2','tỷ'],
     a:'Đã kèm 2 bạn mới, công ty đang cần thêm người quản lý',r:'Muốn tạo ảnh hưởng lớn hơn và tăng thu nhập'},
-  knowledge:{name:'Tri thức',color:'violet',icon:'book',
+  growth:{name:'Phát triển bản thân',color:'violet',icon:'mountain',
     s:'Đọc xong 24 cuốn sách trong năm',m:['Số sách đã đọc xong','0','24','cuốn'],
-    a:'Có 30 phút trên đường đi làm và 30 phút trước khi ngủ',r:'Đọc để nghĩ sâu hơn và ra quyết định tốt hơn'}
+    a:'Có 30 phút trên đường đi làm và 30 phút trước khi ngủ',r:'Đọc để nghĩ sâu hơn và ra quyết định tốt hơn'},
+  relations:{name:'Các mối quan hệ',color:'pink',icon:'users',
+    s:'Gặp nhóm bạn thân ít nhất mỗi tháng một lần',m:['Số buổi gặp bạn bè mỗi tháng','0','2','buổi'],
+    a:'Cả nhóm ở cùng thành phố, cuối tuần thường rảnh',r:'Bạn bè là nơi mình được là chính mình'},
+  mind:{name:'Tinh thần',color:'teal',icon:'smile',
+    s:'Thiền 10 phút mỗi sáng suốt 90 ngày',m:['Số ngày thiền liên tiếp','0','90','ngày'],
+    a:'Dậy sớm hơn 15 phút, có ứng dụng hướng dẫn thiền',r:'Để bình tĩnh hơn trước áp lực và bớt phản ứng vội'},
+  fun:{name:'Trải nghiệm & giải trí',color:'brown',icon:'compass',
+    s:'Đi 2 chuyến du lịch cùng người thân trong năm',m:['Số chuyến đi đã thực hiện','0','2','chuyến'],
+    a:'Có 12 ngày phép, để riêng 1 triệu mỗi tháng cho quỹ du lịch',r:'Những chuyến đi là ký ức cả nhà nhớ mãi'},
+  contrib:{name:'Đóng góp & cộng đồng',color:'slate',icon:'hands',
+    s:'Kèm cặp 3 bạn trẻ mới vào nghề trong năm',m:['Số bạn đã kèm cặp','0','3','bạn'],
+    a:'Có 10 năm kinh nghiệm, công ty đang có chương trình mentor',r:'Muốn trao lại những gì mình từng được nhận'},
+  space:{name:'Không gian sống',color:'olive',icon:'sofa',
+    s:'Nhà gọn gàng, thanh lý một nửa đồ không dùng',m:['Số thùng đồ đã thanh lý','0','10','thùng'],
+    a:'Mỗi cuối tuần dành 1 giờ, có nhóm thanh lý đồ gần nhà',r:'Nhà gọn thì đầu óc cũng nhẹ, về nhà là muốn nghỉ'}
 };
-const KORDER=['family','finance','health','career','knowledge'];
+const KDESC={family:'Bố mẹ, vợ chồng, con cái',finance:'Thu nhập, tiết kiệm, đầu tư',health:'Thể chất, ăn uống, giấc ngủ',
+  career:'Công việc, thăng tiến, kinh doanh',growth:'Kiến thức, kỹ năng, thói quen',relations:'Bạn bè, người yêu, mạng lưới',
+  mind:'Cảm xúc, nội tâm, ý nghĩa sống',fun:'Du lịch, sở thích, nghỉ ngơi',contrib:'Thiện nguyện, kèm cặp, cộng đồng',space:'Nhà cửa, đồ đạc, môi trường sống'};
+const CATALOG=Object.keys(KINDS);
+const KORDER=CATALOG.slice(0,5);
 const GENERIC={s:'Điều bạn muốn đạt được, viết thật cụ thể',m:['Con số cho biết bạn đã đạt','','',''],
   a:'Bạn đang có gì trong tay: thời gian, kỹ năng, người hỗ trợ',r:'Vì sao điều này quan trọng với bạn?'};
 const hintOf=p=>(p&&KINDS[p.kind])||GENERIC;
@@ -514,7 +550,12 @@ const fmtNum=v=>isNum(v)?v.toLocaleString('vi-VN',{maximumFractionDigits:2}):'';
    item  = {id, text, done, doneAt} + actions: cadence 'once'|'daily'|'weekly' + milestones: due, value
    In Vườn cam a pillar is a plot and a goal is a tree: daily activities will point at {goalId, itemId}
    (usually an action), and finished activities plus reached milestones become the tree's nourishment. */
-function mkPillar(o){return {id:o.id||uid(),name:o.name||'Trụ cột mới',color:COLORS.includes(o.color)?o.color:'slate',icon:PICON[o.icon]?o.icon:'leaf',kind:KINDS[o.kind]?o.kind:null,vision:o.vision||''};}
+function mkPillar(o){
+  // "Tri thức" became "Phát triển bản thân": broader, and no longer clashes with "Tri thức cần học" inside a goal
+  if(o.kind==='knowledge'){o=Object.assign({},o,{kind:'growth'});if(o.name==='Tri thức'){o.name=KINDS.growth.name;if(o.icon==='book')o.icon=KINDS.growth.icon;}}
+  return {id:o.id||uid(),name:o.name||'Trụ cột mới',color:COLORS.includes(o.color)?o.color:'slate',icon:PICON[o.icon]?o.icon:'leaf',kind:KINDS[o.kind]?o.kind:null,vision:o.vision||''};
+}
+const pillarOfKind=k=>mkPillar(Object.assign({kind:k},KINDS[k]));
 function mkItem(kind,o){
   o=o||{};const it={id:o.id||uid(),text:clean(o.text),done:!!o.done,doneAt:o.done?(o.doneAt||today()):''};
   if(kind==='actions')it.cadence=CAD[o.cadence]?o.cadence:'once';
@@ -536,7 +577,7 @@ function normGoal(g){
 }
 function normStore(d){
   const s={v:1,pillars:(d.pillars||[]).map(mkPillar),goals:[],createdAt:d.createdAt||Date.now(),changedAt:d.changedAt||Date.now(),
-    lastBackup:d.lastBackup||0,intro:d.intro!==false,lastPillar:d.lastPillar||''};
+    lastBackup:d.lastBackup||0,intro:d.intro!==false,lastPillar:d.lastPillar||'',setupDone:d.setupDone!==false,seeded:d.seeded!==false};
   s.goals=(d.goals||[]).map(normGoal);
   // a goal whose pillar is gone would never be shown; park it in a catch-all pillar instead
   if(s.goals.some(g=>!s.pillars.some(p=>p.id===g.pillarId))){
@@ -556,11 +597,10 @@ function sampleGoal(pid){
     milestones:[{text:'Chạy 5 km liên tục',value:5,due:addDays(-3),done:true,doneAt:addDays(-6)},{text:'Chạy 7 km liên tục',value:7,due:addMonths(2)},{text:'Chạy 10 km liên tục',value:10,due:addMonths(4)}]});
   return g;
 }
-function freshStore(withSample){
+// a first visit starts empty and asks which pillars to use (see renderSetup)
+function freshStore(){
   const now=Date.now();
-  const s={v:1,pillars:KORDER.map(k=>mkPillar(Object.assign({kind:k},KINDS[k]))),goals:[],createdAt:now,changedAt:now,lastBackup:0,intro:true,lastPillar:''};
-  if(withSample)s.goals.push(sampleGoal(s.pillars.find(p=>p.kind==='health').id));
-  return s;
+  return {v:1,pillars:[],goals:[],createdAt:now,changedAt:now,lastBackup:0,intro:true,lastPillar:'',setupDone:false,seeded:false};
 }
 
 /* ---------- storage ---------- */
@@ -580,7 +620,7 @@ function saveNow(){
 window.addEventListener('pagehide',saveNow);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)saveNow();});
 let store=load();
-if(!store){store=freshStore(true);saveNow();}
+if(!store){store=freshStore();saveNow();}
 function touch(g){if(g)g.updatedAt=Date.now();store.changedAt=Date.now();save();}
 
 const undoStack=[];
@@ -668,13 +708,31 @@ let editing=null;          // {goal,kind,id} of the item whose text is open for 
 let metricEditing=false;
 let focusAdd=null;         // kind whose add box should get focus back after a render
 function render(){
-  document.body.classList.toggle('home',view.name==='home');
+  document.body.classList.toggle('home',view.name==='home'&&store.setupDone);
   if(view.name==='goal')renderGoal();else renderHome();
   const g=view.name==='goal'&&G(view.goal),p=view.pillar&&P(view.pillar);
   document.title=g?g.title+' · Mục tiêu':p?p.name+' · Mục tiêu':'Mục tiêu SMART';
 }
 
+let picked=null;   // kinds ticked on the setup screen
+function renderSetup(){
+  if(!picked)picked=new Set(KORDER);
+  const n=picked.size;
+  $('#main').innerHTML='<div class="hero"><h1>Bạn muốn phát triển những mảng nào?</h1><p>Mỗi trụ cột là một mảng lớn của cuộc sống, và sau này là một khu đất trong vườn. Chọn vài mảng quan trọng nhất với bạn lúc này; thêm, bớt hay đổi tên lúc nào cũng được.</p></div>'+
+    '<div class="pickgrid" role="group" aria-label="Chọn trụ cột">'+CATALOG.map(k=>{const K=KINDS[k];
+      return '<button type="button" class="pick pc-'+K.color+'" data-act="pickKind" data-id="'+k+'" aria-pressed="'+picked.has(k)+'"><span class="picon">'+svg(PICON[K.icon])+'</span><span class="pn">'+esc(K.name)+'<small>'+esc(KDESC[k])+'</small></span><span class="tick">'+svg(IC.check)+'</span></button>';}).join('')+'</div>'+
+    '<div class="setup-foot"><span class="muted">Chưa thấy mảng của bạn? Sau này thêm bằng nút “+&nbsp;Trụ&nbsp;cột”.</span><button class="btn primary" type="button" data-act="finishSetup"'+(n?'':' disabled')+'>'+(n?'Bắt đầu với '+n+' trụ cột':'Hãy chọn ít nhất một trụ cột')+'</button></div>';
+}
+function finishSetup(){
+  if(!picked||!picked.size)return;
+  CATALOG.forEach(k=>{if(picked.has(k)&&!store.pillars.some(p=>p.kind===k))store.pillars.push(pillarOfKind(k));});
+  // the worked example only comes along on the very first setup, and only if its pillar was chosen
+  const hp=store.pillars.find(p=>p.kind==='health');
+  if(!store.seeded&&hp&&!store.goals.length)store.goals.push(sampleGoal(hp.id));
+  store.seeded=true;store.setupDone=true;picked=null;touch();render();window.scrollTo(0,0);
+}
 function renderHome(){
+  if(!store.setupDone){renderSetup();return;}
   const active=store.goals.filter(g=>g.status!=='done').length,won=store.goals.length-active;
   const list=view.pillar?[P(view.pillar)]:store.pillars;
   let h='<div class="hero"><h1>Mục tiêu của bạn</h1><p>'+store.pillars.length+' trụ cột · '+active+' mục tiêu đang theo đuổi'+(won?' · '+won+' đã đạt':'')+'</p></div>';
@@ -691,7 +749,7 @@ function renderHome(){
       '<button type="button" class="pchip add" data-act="addPillar">'+svg(IC.plus)+'Trụ cột</button></div>';
     h+=list.map(pillarHTML).join('');
   }else{
-    h+='<div class="empty"><b>Chưa có trụ cột nào.</b><br>Trụ cột là những mảng lớn của cuộc sống mà bạn muốn phát triển.<div class="row"><button class="btn primary" type="button" data-act="addPillar">'+svg(IC.plus)+'Thêm trụ cột</button><button class="btn" type="button" data-act="restorePillars">Dùng 5 trụ cột gợi ý</button></div></div>';
+    h+='<div class="empty"><b>Chưa có trụ cột nào.</b><br>Trụ cột là những mảng lớn của cuộc sống mà bạn muốn phát triển.<div class="row"><button class="btn primary" type="button" data-act="addPillar">'+svg(IC.plus)+'Thêm trụ cột</button><button class="btn" type="button" data-act="restorePillars">Chọn từ gợi ý</button></div></div>';
   }
   $('#main').innerHTML=h;
 }
@@ -986,27 +1044,33 @@ function goalForm(g,opt){
 function pillarForm(p){
   const isNew=!p;
   const used=store.pillars.map(x=>x.color);
-  let color=p?p.color:(COLORS.find(c=>!used.includes(c))||'slate'),icon=p?p.icon:'leaf';
+  let color=p?p.color:(COLORS.find(c=>!used.includes(c))||'slate'),icon=p?p.icon:'leaf',kind=p?p.kind:null;
+  const sugg=isNew?CATALOG.filter(k=>!store.pillars.some(x=>x.kind===k)):[];
   const body=document.createElement('div');body.className='pform';
-  body.innerHTML='<label class="fld"><span>Tên trụ cột</span><input id="pfName" maxlength="40" autocomplete="off" placeholder="Ví dụ: Tinh thần, Bạn bè, Cộng đồng, Sở thích"></label>'+
+  body.innerHTML=(sugg.length?'<div class="fld"><span>Gợi ý</span><div class="psel sugg">'+sugg.map(k=>'<button type="button" class="pchip pc-'+KINDS[k].color+'" data-k="'+k+'" aria-pressed="false" title="'+esc(KDESC[k])+'"><span class="dot"></span>'+esc(KINDS[k].name)+'</button>').join('')+'</div></div>':'')+
+    '<label class="fld"><span>Tên trụ cột</span><input id="pfName" maxlength="40" autocomplete="off" placeholder="'+(sugg.length?'Chọn một gợi ý ở trên, hoặc tự đặt tên':'Ví dụ: Sở thích, Tâm linh, Học tập của con')+'"></label>'+
     '<div class="fld"><span>Màu</span><div class="swatches">'+COLORS.map(c=>'<button type="button" class="sw pc-'+c+'" data-c="'+c+'" aria-label="Màu '+c+'" aria-pressed="'+(c===color)+'"></button>').join('')+'</div></div>'+
     '<div class="fld"><span>Biểu tượng</span><div class="icons">'+Object.keys(PICON).map(k=>'<button type="button" class="icb" data-ic="'+k+'" aria-label="Biểu tượng '+k+'" aria-pressed="'+(k===icon)+'">'+svg(PICON[k])+'</button>').join('')+'</div></div>'+
     '<label class="fld"><span>Tầm nhìn (không bắt buộc)</span><textarea class="inp" id="pfVision" rows="2" maxlength="300" placeholder="Bạn muốn trụ cột này trông ra sao sau vài năm nữa?"></textarea></label>';
   const nm=body.querySelector('#pfName'),vs=body.querySelector('#pfVision');
   if(p){nm.value=p.name;vs.value=p.vision;}
   const paint=()=>{body.className='pform pc-'+color;body.querySelectorAll('.sw').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.c===color)));body.querySelectorAll('.icb').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ic===icon)));};
-  body.addEventListener('click',e=>{const s=e.target.closest('.sw');if(s){color=s.dataset.c;paint();}const i=e.target.closest('.icb');if(i){icon=i.dataset.ic;paint();}});
+  body.addEventListener('click',e=>{
+    const g=e.target.closest('.sugg .pchip');
+    if(g){const K=KINDS[g.dataset.k];kind=g.dataset.k;nm.value=K.name;color=K.color;icon=K.icon;
+      body.querySelectorAll('.sugg .pchip').forEach(b=>b.setAttribute('aria-pressed',String(b===g)));paint();if(!TOUCH)nm.focus();return;}
+    const s=e.target.closest('.sw');if(s){color=s.dataset.c;paint();}const i=e.target.closest('.icb');if(i){icon=i.dataset.ic;paint();}});
   const submit=()=>{
     const name=clean(nm.value);if(!name){toast('Hãy đặt tên cho trụ cột');nm.focus();return false;}
     if(p){pushUndo();Object.assign(p,{name,color,icon,vision:vs.value.trim()});}
-    else{const np=mkPillar({name,color,icon,vision:vs.value.trim()});store.pillars.push(np);}
+    else{const np=mkPillar({name,color,icon,kind,vision:vs.value.trim()});store.pillars.push(np);}
     touch();render();toast(isNew?'Đã thêm trụ cột '+name:'Đã lưu trụ cột');
   };
   nm.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing&&e.keyCode!==229){e.preventDefault();if(submit()!==false)closeDialog();}});
   const acts=[{label:'Huỷ'},{label:isNew?'Thêm trụ cột':'Lưu',kind:'primary',run:submit}];
   if(p)acts.unshift({label:'Xoá trụ cột',kind:'quiet left',run:()=>{deletePillar(p);}});
   dialog(isNew?'Trụ cột mới':'Sửa trụ cột',body,acts);
-  paint();if(!TOUCH||isNew)nm.focus();
+  paint();if(!TOUCH&&isNew&&!sugg.length)nm.focus();
 }
 function deletePillar(p){
   const n=store.goals.filter(g=>g.pillarId===p.id).length;
@@ -1109,6 +1173,7 @@ function openBackup(){
       });
       inc.goals.forEach(g=>{if(remap[g.pillarId])g.pillarId=remap[g.pillarId];const i=store.goals.findIndex(x=>x.id===g.id);if(i>=0)store.goals[i]=g;else store.goals.push(g);});
     }
+    if(store.pillars.length)store.setupDone=store.seeded=true;
     touch();closeDialog();view=parseRoute();render();
     toast((a==='replace'?'Đã thay bằng ':'Đã gộp ')+inc.goals.length+' mục tiêu',{label:'Hoàn tác',run:undo});
   });
@@ -1188,7 +1253,9 @@ const ACT={
   dismissIntro:()=>{store.intro=false;touch();render();},
   filter:b=>{const id=b.dataset.id;history.replaceState(null,'',id?'#/p/'+id:'#/');view=parseRoute();render();},
   addPillar:()=>pillarForm(null),
-  restorePillars:()=>{KORDER.forEach(k=>{if(!store.pillars.some(p=>p.kind===k))store.pillars.push(mkPillar(Object.assign({kind:k},KINDS[k])));});touch();render();},
+  restorePillars:()=>{store.setupDone=false;picked=null;render();},
+  pickKind:b=>{const k=b.dataset.id;if(picked.has(k))picked.delete(k);else picked.add(k);renderSetup();},
+  finishSetup,
   pillarMenu:b=>{
     const p=P(b.dataset.id);if(!p)return;const i=store.pillars.indexOf(p);
     const items=[{label:'Thêm mục tiêu',icon:IC.plus,run:()=>goalForm(null,{pillar:p.id})},{label:'Sửa trụ cột',icon:IC.edit,run:()=>pillarForm(p)}];
